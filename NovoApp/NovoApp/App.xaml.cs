@@ -1,6 +1,5 @@
-﻿using System;
+﻿using NovoApp.View;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace NovoApp
 {

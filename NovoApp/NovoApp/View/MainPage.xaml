@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:NovoApp.ViewModel"
+             x:Class="NovoApp.View.MainPage">
+    <ContentPage.BindingContext>
+        <viewmodels:MainPageViewModel/>
+    </ContentPage.BindingContext>
+    <StackLayout>
+        <Label Text="END"
+               HorizontalOptions="Center"
+               IsVisible="False"
+               x:Name="EndLabel"/>
+        <Entry Text="{Binding InputText}"/>
+        <Button 
+            Command="{Binding CheckInputTextCmd}"
+            Text="Validate"/>
+        <Label>
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="SCORE: "/>
+                    <Span Text="{Binding Score}"/>
+                    <Span Text="/"/>
+                    <Span Text="{Binding WordsList.Count}"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label>
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Time remaining: "/>
+                    <Span Text="{Binding Timer}"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <CollectionView
+            ItemsSource="{Binding WordsList}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ContentView Padding="15">
+                        <Frame
+                            CornerRadius="10"
+                            BackgroundColor="DarkGray">
+                            <Label
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                               FontAttributes="Bold"
+                               Text="{Binding Name}"
+                               TextColor="DarkGray"
+                                FontSize="24">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding Found}" Value="True">
+                                        <Setter Property="TextColor" Value="Green"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Frame>
+                    </ContentView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+
+</ContentPage>
