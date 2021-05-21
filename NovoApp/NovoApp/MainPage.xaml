@@ -15,16 +15,17 @@
         <CollectionView
             x:Name="WordCollection">
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate> 
                     <StackLayout 
                         x:Name="Child"
+                        HeightRequest="50"
                         BackgroundColor="DarkGray">
-                        <Label 
-                           Text="{Binding Word}"
-                           IsVisible="False">
+                        <Label
+                           Text="{Binding Name}"
+                           TextColor="DarkGray">
                             <Label.Triggers>
-                                <DataTrigger TargetType="Label" Binding="{Binding Name}" Value="True">
-                                    <Setter Property="IsVisible" Value="True"/>
+                                <DataTrigger TargetType="Label" Binding="{Binding Found}" Value="True">
+                                    <Setter Property="TextColor" Value="Green"/>
                                 </DataTrigger>
                             </Label.Triggers>
                         </Label>
