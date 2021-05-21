@@ -2,19 +2,27 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:viewmodels="clr-namespace:NovoApp.ViewModel"
-             x:Class="NovoApp.View.MainPage">
+             x:Class="NovoApp.View.MainPage"
+             x:Name="Page">
     <ContentPage.BindingContext>
         <viewmodels:MainPageViewModel/>
     </ContentPage.BindingContext>
     <StackLayout>
-        <Label Text="END"
-               HorizontalOptions="Center"
-               IsVisible="False"
-               x:Name="EndLabel"/>
+        <Label Text="THE END"
+               HorizontalTextAlignment="Center"
+               IsVisible="{Binding Finished}"
+               FontSize="Title"/>
         <Entry Text="{Binding InputText}"/>
+
         <Button 
-            Command="{Binding CheckInputTextCmd}"
-            Text="Validate"/>
+            Text="Validate"
+            Command="{Binding CheckInputTextCmd}">
+            <Button.Triggers>
+                <DataTrigger TargetType="Button" Binding="{Binding Finished}" Value="True">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Button.Triggers>
+        </Button>
         <Label>
             <Label.FormattedText>
                 <FormattedString>
@@ -52,6 +60,13 @@
                                     <DataTrigger TargetType="Label" Binding="{Binding Found}" Value="True">
                                         <Setter Property="TextColor" Value="Green"/>
                                     </DataTrigger>
+                                    <MultiTrigger TargetType="Label">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding Source={x:Reference Page}, Path=BindingContext.Finished}" Value="True"/>
+                                            <BindingCondition Binding="{Binding Found}" Value="False"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="TextColor" Value="Red"/>
+                                    </MultiTrigger>
                                 </Label.Triggers>
                             </Label>
                         </Frame>

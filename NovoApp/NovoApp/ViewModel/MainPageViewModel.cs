@@ -30,12 +30,23 @@ namespace NovoApp.ViewModel
         }
 
         private TimeSpan _timer;
-        public TimeSpan Timer 
-        { 
+        public TimeSpan Timer
+        {
             get => _timer;
             set
             {
                 _timer = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _finished;
+        public bool Finished
+        {
+            get => _finished;
+            set
+            {
+                _finished = value;
                 RaisePropertyChanged();
             }
         }
@@ -46,7 +57,7 @@ namespace NovoApp.ViewModel
 
         public MainPageViewModel()
         {
-            Timer = new TimeSpan(0, 5, 0);
+            Timer = new TimeSpan(0, 1, 0);
             CheckInputTextCmd = new Command(ValidateInputText);
 
             WordsList = new List<Words>()
@@ -59,11 +70,13 @@ namespace NovoApp.ViewModel
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
                 if (Score < WordsList.Count &&
-                      Timer.TotalSeconds > 0)
+                      Timer.TotalSeconds > 0 &&
+                      !Finished)
                 {
                     Timer = Timer.Add(TimeSpan.FromSeconds(-1));
                     return true;
                 }
+                Finished = true;
                 return false;
             });
         }
@@ -77,8 +90,17 @@ namespace NovoApp.ViewModel
             if (wordFound != null)
             {
                 wordFound.Found = true;
-                Score++;
+                IncrementScore();
             }
         };
+
+        private void IncrementScore()
+        {
+            Score++;
+            if (Score == WordsList.Count)
+            {
+                Finished = true;
+            }
+        }
     }
 }
