@@ -12,7 +12,7 @@ namespace NovoApp
     public partial class MainPage : ContentPage
     {
         public int Score { get; set; }
-        public int Time { get; set; }
+        public TimeSpan Time { get; set; }
 
         public List<Words> WordsList = new List<Words>()
         {
@@ -24,22 +24,21 @@ namespace NovoApp
 
         public MainPage()
         {
-            Time = 5 * 60;
+            Time = new TimeSpan(0,5,0);
             InitializeComponent();
             WordCollection.ItemsSource = WordsList;
             UpdateScoreLabel();
-            Task.Run(async () =>
+            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
-                while (Score < WordsList.Count &&
-                      Time > 0)
+                if(Score < WordsList.Count &&
+                      Time.TotalSeconds > 0)
                 {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        TimerLabel.Text = $"TIMER {Time} SECONDS";
-                    });
-                       await Task.Delay(1000);
-                    Time = Time - 1;
-                }                
+
+                    TimerLabel.Text = $"{Time.ToString("mm\\:ss")} SECONDS REMAINING !";
+                    Time = Time.Add(TimeSpan.FromSeconds(-1));
+                    return true;
+                }
+                return false;
             });
         }
 
